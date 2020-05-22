@@ -1,0 +1,75 @@
+Jour 1/
+	-	projet_crud
+	    --- Partager plusieurs bases de données et tables : entreprise, bibliotheque, boutique, ...
+		---	app/config.xml
+		--- autoload.php
+
+		--- controller/Controller.php : class + construct
+		--- model\EntityRepository : getDb().
+		--- index.php : 2ere lignes sur 3 + var_dump.
+
+		--- controller/Controller.php : handleRequest() complet
+		--- controller/Controller.php : création des méthodes associées save() avec echo "save", select() avec echo "select",  delete() avec echo "delete",  selectAll() avec echo "selectAll", 
+		--- test dans l'url manuel : index.php?op=add , index.php?op=update , index.php?op=delete , index.php ...
+
+		--- model\EntityRepository : selectAll() --- sans le orderby.
+		--- controller/Controller.php : selectAll() affichage des données direct dans le controller : $r = $this->db->selectAll();       var_dump($r);
+
+		--- controller/Controller.php : écriture de l'appel de la méthode render() layout.php.
+
+		--- controller/Controller.php : écrire le contenu de la méthode render().
+
+		--- écriture du fichier contacts.php (sans les liens modifier , voir et supprimer).
+
+		--- écriture du layout.php.
+
+		--- controller/Controller.php : écrire la méthode save() (lié à l'action add pour ajouter un employé) avec uniquement la méthode render() sans la partie getFields et sans la partie values.
+
+		--- Créer le fichier contact-form.php
+			Au début les apprenants peuvent écrire contact-form.php avec la déclaration des champs manuels, et ensuite, on crée la fonction getFields() pour afficher les champs de manière automatisé et générique.
+
+		--- controller/Controller.php : compléter la méthode render() avec l'appel de $this->db->getFields().
+
+		--- model\EntityRepository.php : écrire la méthode complète getFields() complète.
+
+		--- controller/Controller.php : une fois que le formulaire s'affiche, ajouter la partie traitement	if ($_POST) dans la méthode save().
+
+		--- model\EntityRepository.php : écrire la méthode save() avec un insert normal (préciser le nom des champs et les valeur de $_POST). Vérifier que ça fonctionne (enregistrement en BDD).
+
+		--- model\EntityRepository.php : réécrire la méthode save() avec un insert générique (sans le contexte). Vérifier que ça fonctionne toujours (enregistrement en BDD).
+
+		--- compléter le fichier contacts.php (avec les liens modifier , voir et supprimer).
+
+		--- model\EntityRepository.php : compléter la méthode save() avec la partie concernant l'update (id,...)
+
+		--- model\EntityRepository.php : écriture de la méthode select() non générique. écriture de la méthode select() générique.
+
+		--- model\EntityRepository.php : compléter l'appel de la méthode render() en passant les parametres complémentaires du type $values.
+
+		--- model\EntityRepository.php : écrire la méthode save() avec un update normal dans un IF/ELSE (préciser le nom des champs et les valeur de $_POST). Vérifier que ça fonctionne (enregistrement en BDD).
+
+		--- model\EntityRepository.php : réécrire la méthode save() avec un update générique dans un IF/ELSE (sans le contexte). Vérifier que ça fonctionne toujours (enregistrement en BDD).
+
+		--- model\EntityRepository.php : réécrire la méthode save() en retirant INSERT & UPDATE, écrire un REPLACE générique (sans le contexte). Vérifier que ça fonctionne toujours (enregistrement en BDD).
+
+		--- controller/Controller.php : écrire la méthode delete().
+
+		--- model\EntityRepository.php : écrire la méthode delete() avec un delete normal. Vérifier que ça fonctionne (enregistrement en BDD).
+
+		--- model\EntityRepository.php : écrire la méthode delete() avec un delete générique (sans le contexte). Vérifier que ça fonctionne toujours (enregistrement en BDD).
+
+		--- écriture de la méthode redirect() et appel un peu partout où c'est nécessaire.
+
+		--- EXERCICE 01 : SELECTION d'UNE DONNEE (+création de la vue)
+		model\EntityRepository.php : écrire la méthode select() avec un select normal. Vérifier que ça fonctionne (affichage).
+
+		--- model\EntityRepository.php : écrire la méthode select() avec un select générique (sans le contexte). Vérifier que ça fonctionne toujours (affichage).
+
+		--- EXERCICE 02 : ORDER BY (clic sur un champ de la table et classement).
+
+		--- EXERCICE 03 : pagination ... (prévoir correction).
+
+		--- EXERCICE 04 : Ecrire la méthode RUN de manière à afficher un formulaire d'installation (type CMS).
+	En fonction des choix de l'internaute (hote, bdd, user, ...), créer dynamiquement un fichier config.xml dans /app/ (dans le cas où ils n'existent pas).
+	Recherche Google "php generate xml file" ... (prévoir correction).
+------------------------------------------------------------------------

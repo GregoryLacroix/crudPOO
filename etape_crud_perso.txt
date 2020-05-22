@@ -1,0 +1,142 @@
+1. Arborescence
+
+2. réaliser app->config.xml
+
+3. création autoload
+
+4. création Controller->Controller.php
+   écrire ligne 1 à 10 : $this->db = new [connexion BD];  
+   La connexion à la BDD ne se trouve pas dans le controller. 
+
+5. Création de model->EntityRepository.php
+   écrire ligne 1 à 33 -> méthode getDb()
+   effectuer pas à pas les différents contrôles var_dump pour afficher un objet PDO instancié
+
+6. retourner dans  Controller->Controller.php
+   écrire le ligne : $this->db = new \model\EntityRepository;
+
+7. Création index.php
+   écrire les lignes 1 à 6 pour contrôller le bon fonctionnement de l'autoload et de la connexion à la BDD
+                                                                                                                                      
+8. Création de la méthode controller->Controller.php->handlerRequest()
+   cette fonction permet de savoir ce que l'internute demande (afficher/modifer/supprimer un/des employés)
+
+9. Retouner dans index.php et écrire la ligne : $controller->handlerRequest();
+
+10. créer la méthode controller->Controller.php->selectAll() et ajouter seulement un echo pour vérifier l'appel de la fonction 
+    public function selectAll()
+	{
+        echo 'Méthode selectAll'; 
+        $r = $this->db->selectAll();
+        var_dump($r);  
+    }
+
+11. Retourner dans model->EntityRepository.php
+    écrire la méthode selectAll()
+    On observe le resultat du fetchAll() c'est à dire tout les employes
+
+12. création du fichier view->layout.php
+    c'est le fichier d'affichage de l'application
+    écrire ligne 1 à 22 tout le fichier, c'est la structure de l'application
+
+13. création du fichier view->donnees.php
+    écrire seulement la ligne 1 : <?php var_dump($donnees); ?>
+
+14. Création de la méthode controller->Controller.php->render()
+
+15. Terminer la méthode controller->Controller.php->selectAll()
+    écrire l'appel de la méthode render() ligne 49 à 53
+    sauf les lignes : 'fields' => $this->db->getFields(),
+			          'id' => 'id' . ucfirst($this->db->table)
+
+16. Retouner dans donnees.php et écrire l'affichage des données sous forme de tableau HTML, écrire tout le tableau sauf <thead></thead>
+
+17. Création de la méthode model->EntityRepository.php->getFields(); 
+    ajouter la ligne de code 'fields' => $this->db->getFields() dans controller->Controller.php->selectAll() ligne 52 
+
+18. Création de <thead></thead> dans donnees.php
+
+19. création donnees-form.php
+    le but est de créer un formulaire générique et pas de définir les champs manuellement
+    écrire les lignes suivante : 
+    <form method="post" action"">
+        <input type="submit">
+    </form>
+
+20. Créer la méthode  controller->Controller.php->save($op)
+    écrire seulement les lignes suivantes : 
+    	if($_POST)
+		{
+            // ...
+        }
+        $this->render('layout.php', 'donnees-form.php', array(
+			"title" => "Donnée : $title",
+			"op" => $op,
+			"fields" => $this->db->getFields()
+        ));
+        $this->db->getFields() : c'est ce qui va nous permettre de recupérer le nom des champs pour les définir de façon générique 
+
+21. retourner dans donnees-form.php et terminer l'affichage
+    on récupère les données via la méthode render()
+    écrire les lignes 2 à 5 sauf value="<?= ($op == 'update') ? $values[$field['Field']] : '' ?>"
+    ajouter des classes bootstrap pour un meilleur rendu front
+    les champs sont générés dynamiquement, ajouter un champs dans la BDD et rafraichir l'affichage, le champs s'affiche automatiquement (optionnel)
+
+22. ajouter la ligne return array_splice($r,1); ligne 39 EntityRepository.php afin de ne pas avoir le champ     id_employes dans le formulaire ajout/modif donnees-form.php
+    + ajouter manuellement l'entête th pour l'id dans donnees.php
+    + ajouter le bouton ligne 3 donnees.php pour une redirection en cas d'ajout ($_GET['op'] == 'add')
+
+23. Retouner dans controller->Controller.php->save($op)
+    ecrire les lignes suivantes 
+    if($_POST)
+    {
+        $r = $this->db->save() // on execute la méthode save() provenant de EntityRepository.php
+    }
+
+25. Création de la méthode model->EntityRepository.php->save(); 
+
+    Ecrire la requete replace en entier insert/update
+    écrire ligne 62 + ligne 59 pour gérer l'id
+    faire des vérifications mais à ce niveau la l'insertion est OK.
+    S'attendre à beaucoup d'erreur de syntahxe au niveau des étudiants, beaucoup de debugage, courage!!
+    privilégié le INSERT pour les étudiants, au choix...
+
+26. Retouner dans donnees.php et écrire les liens select/update/delete ligne 21 à 23
+    ajouter la ligne 53 dans la méthode controller->Controller.php->selectAll()
+    'id' => 'id' . ucfirst($this->db->table) // affiche idEmployes
+    cela va permettre de recupérer les id dans les liens select/update/delete
+    + ajouter les <th></th> dans donnees.php pour les liens voir/modifier/supprimer dans donnees.php ligne 12 à 14
+
+27. ajouter $title = $op ligne 78 controller.php
+    + "title" => "Donnée : $title", controller.php
+    grace à ces lignes de code , si on cique sur ajout ou modifier, on tombe sur le meme formulaire mais le titre change : add ou update
+
+28. etape modification: 
+    écrire les lignes 80 et 81 de la méthode controller->Controller.php->save($op)
+
+29. création de la méthode model->EntityRepository.php->select(); cette méthode permet de selectionner les      données d'un employé dans la BDD en cas de modifiaction ligne 42 à 47 
+    + ajouter le code suivant : "values" => $values dans le méthode controller->Controller.php->save($op) ligne 93 appel de la méthode render, on ajoute un indice 'values' qui contient les données récupérées pour l'update
+
+30. Modifier l'attribut value de la view donnees-form.php 
+    value="<?= ($op == 'update') ? $values[$field['Field']] : '' ?>"
+    cela permet de récupérer les données de l'employé dans les champs du formulaire html
+
+31. si ce n'est pas fait remplacer INSERT par REPLACE dans model->EntityRepository.php->save();
+
+32. pour rediriger aprés la modif ou l'inseert ajouter le ligne de code suivante dans le fichier controller->Controller.php->save($op) ligne 87 : $this->redirect('index.php'); et dans le même temps écire la méthode redirect() ligne 72 à 74 dans Controller.php
+
+33. POur le lien voir l'employé
+    Créer la méthode controller->Controller.php->select() , appel de la même méthode que pour la modif
+
+34. Créer le fichier donnee.php (sans 's') permettant d'afficher les données d'un employé (affichage a amélioré)
+
+35. Etape delete : 
+    créer la méthode controller->Controller.php->delete() ligne 35 à 40
+
+36. création de la méthode model->EntityRepository.php->delete();
+
+
+
+
+
+    
